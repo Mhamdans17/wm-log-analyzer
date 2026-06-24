@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wM Log Streamer</title>
+    <!-- Modern Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-rings"></div>
+
+    <div class="app-container">
+        <!-- NAVBAR MATCHING REFERENCE -->
+        <header>
+            <div class="logo">
+                <h1>wM<span class="brand-accent">Streamer</span></h1>
+            </div>
+
+            <div class="controls-center">
+                <div class="filter-nav">
+                    <button class="filter-btn active" data-filter="ALL">All Logs</button>
+                    <button class="filter-btn" data-filter="E">Errors</button>
+                    <button class="filter-btn" data-filter="W">Warnings</button>
+                    <button class="filter-btn" data-filter="I">Info</button>
+                </div>
+            </div>
+
+            <div class="actions-right">
+                <div class="search-pill">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Search logs...">
+                </div>
+                <button id="soundBtn" class="pill-btn outline" style="display: flex; align-items: center; gap: 6px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                    Sound: Off
+                </button>
+                <button id="pauseBtn" class="pill-btn outline">Pause</button>
+                <button id="clearBtn" class="pill-btn primary">Clear</button>
+            </div>
+        </header>
+
+        <!-- HERO SECTION MATCHING REFERENCE -->
+        <div class="hero-section">
+            <div class="hero-text">
+                <h2>Achieve <span class="brand-accent">system clarity</span> and take control of your infrastructure with tools designed to simplify, streamline, and monitor your <span class="text-dark">live server logs</span> — all in one platform.</h2>
+            </div>
+            
+            <div class="stat-cards">
+                <div class="stat-card card-dark">
+                    <h3>Critical Errors</h3>
+                    <div class="stat-number" id="errorCount">0</div>
+                    <p>System failures and exceptions requiring immediate attention.</p>
+                </div>
+                <div class="stat-card card-mid">
+                    <h3>Active Warnings</h3>
+                    <div class="stat-number" id="warningCount">0</div>
+                    <p>Potential problems, deprecations, or performance issues.</p>
+                </div>
+                <div class="stat-card card-light">
+                    <h3>Info Events</h3>
+                    <div class="stat-number" id="infoCount">0</div>
+                    <p>Standard operational events and lifecycle milestones.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TERMINAL (REPLACING THE BOTTOM SECTION OF REFERENCE) -->
+        <main class="terminal-container">
+            <div class="terminal-header">
+                <div class="terminal-title">
+                    Live Stream <span>/ server.log</span>
+                </div>
+            </div>
+            <div class="terminal-body" id="logContainer"></div>
+        </main>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
