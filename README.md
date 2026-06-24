@@ -2,6 +2,8 @@
 
 Aplikasi web sederhana untuk memantau (streaming) log dari server webMethods secara real-time. Aplikasi ini menampilkan log dengan antarmuka yang modern, memiliki fitur pencarian, filter berdasarkan tingkat keparahan (Error, Warning, Info), dan notifikasi suara.
 
+![Tampilan Antarmuka wMLog Analyzer](public/screen/ui.jpg)
+
 ## Persyaratan Sistem
 
 Untuk menjalankan aplikasi ini, komputer Anda harus memiliki **Node.js**.

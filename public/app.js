@@ -59,12 +59,42 @@ function playTone(freq, type, duration, vol) {
 }
 
 function playSuccessSound() {
-    playTone(800, 'sine', 0.1, 0.1);
-    setTimeout(() => playTone(1200, 'sine', 0.15, 0.1), 100);
+    if (!isSoundOn || !audioCtx) return;
+    // 8-bit Coin / Power-up sound
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'square';
+    
+    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.08); // Quick octave jump
+    
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime + 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.3);
 }
 
 function playFailedSound() {
-    playTone(150, 'square', 0.4, 0.1);
+    if (!isSoundOn || !audioCtx) return;
+    // 8-bit Damage / Error sound
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sawtooth';
+    
+    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.3); // Pitch drop
+    
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.3);
 }
 
 if (soundBtn) {
