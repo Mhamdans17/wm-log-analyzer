@@ -183,6 +183,7 @@ function renderLog(parsed) {
             navigator.clipboard.writeText(parsed.raw)
                 .then(() => { 
                     copyBtn.innerHTML = checkIcon; 
+                    showToast();
                     setTimeout(() => copyBtn.innerHTML = copyIcon, 1500); 
                 })
                 .catch(() => {});
@@ -254,4 +255,31 @@ function highlightText(text, query) {
     if (!query) return text;
     const regex = new RegExp(`(${query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g,'\\$&')})`, 'gi');
     return text.replace(regex, '<span class="highlight">$1</span>');
+}
+
+const pixelEmotes = [
+    '/emot/cry.png',
+    '/emot/goofy.png',
+    '/emot/heart-eyes.png',
+    '/emot/love.png',
+    '/emot/numb.png',
+    '/emot/sunglasses.png'
+];
+
+function showToast() {
+    const emotSrc = pixelEmotes[Math.floor(Math.random() * pixelEmotes.length)];
+    const toast = document.createElement('div');
+    toast.className = 'pixel-toast';
+    toast.innerHTML = `<span>Copied!</span> <img src="${emotSrc}" class="toast-emot">`;
+    document.body.appendChild(toast);
+    
+    // Force reflow
+    toast.offsetHeight;
+    
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 2500);
 }
