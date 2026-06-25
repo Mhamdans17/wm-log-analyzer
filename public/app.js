@@ -39,62 +39,25 @@ let isSoundOn = false;
 let audioCtx;
 const soundBtn = document.getElementById('soundBtn');
 
+// Preload notification sounds
+const successSound = new Audio('/sound/success notif.wav');
+const failedSound = new Audio('/sound/failed notif.wav');
+
 function initAudio() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
 }
 
-function playTone(freq, type, duration, vol) {
-    if (!isSoundOn || !audioCtx) return;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + duration);
-}
-
 function playSuccessSound() {
-    if (!isSoundOn || !audioCtx) return;
-    // 8-bit Coin / Power-up sound
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'square';
-    
-    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.08); // Quick octave jump
-    
-    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-    gain.gain.setValueAtTime(0.05, audioCtx.currentTime + 0.1);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-    
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.3);
+    if (!isSoundOn) return;
+    successSound.currentTime = 0;
+    successSound.play().catch(err => console.error('Error playing success sound:', err));
 }
 
 function playFailedSound() {
-    if (!isSoundOn || !audioCtx) return;
-    // 8-bit Damage / Error sound
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'sawtooth';
-    
-    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.3); // Pitch drop
-    
-    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-    
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.3);
+    if (!isSoundOn) return;
+    failedSound.currentTime = 0;
+    failedSound.play().catch(err => console.error('Error playing failed sound:', err));
 }
 
 if (soundBtn) {
