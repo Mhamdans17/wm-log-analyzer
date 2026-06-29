@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "b3e39066-51e4-46b0-95de-9c9082a61174",
+		"name": "API Chaining Example",
+		"description": "Koleksi Postman sederhana untuk mengetes fitur Ekstraksi Variabel di wM Tester.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Get Token",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/get?token_rahasia=SUPER_SECRET_123",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "token_rahasia",
+							"value": "SUPER_SECRET_123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Use Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pesan\": \"Halo, ini token yang berhasil saya tangkap!\",\r\n    \"token_anda\": \"{{my_token}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://postman-echo.com"
+		}
+	]
+}
