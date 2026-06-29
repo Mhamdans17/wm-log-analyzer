@@ -51,6 +51,8 @@ testerForm.addEventListener('submit', async (e) => {
     const collectionFile = document.getElementById('collectionFile').files[0];
     const dataFile = document.getElementById('dataFile').files[0];
     const baseUrl = document.getElementById('baseUrl').value;
+    const captureJsonField = document.getElementById('captureJsonField').value;
+    const captureVarName = document.getElementById('captureVarName').value;
     const expectedJsonField = document.getElementById('expectedJsonField').value;
     const expectedJsonValue = document.getElementById('expectedJsonValue').value;
 
@@ -73,6 +75,8 @@ testerForm.addEventListener('submit', async (e) => {
     formData.append('collection', collectionFile);
     if (dataFile) formData.append('data', dataFile);
     if (baseUrl) formData.append('baseUrl', baseUrl);
+    if (captureJsonField) formData.append('captureJsonField', captureJsonField);
+    if (captureVarName) formData.append('captureVarName', captureVarName);
     if (expectedJsonField) formData.append('expectedJsonField', expectedJsonField);
     if (expectedJsonValue) formData.append('expectedJsonValue', expectedJsonValue);
 

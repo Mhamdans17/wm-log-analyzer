@@ -78,31 +78,52 @@ app.post('/api/newman/run', upload.fields([{ name: 'collection', maxCount: 1 }, 
     const baseUrl = req.body.baseUrl;
     const expectedJsonField = req.body.expectedJsonField;
     const expectedJsonValue = req.body.expectedJsonValue;
+    const captureJsonField = req.body.captureJsonField;
+    const captureVarName = req.body.captureVarName;
 
-    // --- DYNAMIC ASSERTION INJECTION ---
-    if (expectedJsonField && expectedJsonValue) {
+    // --- DYNAMIC INJECTION ---
+    if ((expectedJsonField && expectedJsonValue) || (captureJsonField && captureVarName)) {
         try {
             let colData = JSON.parse(fs.readFileSync(collectionPath, 'utf8'));
             let scripts = [];
             
-            scripts.push(`
-                let expFieldVal = pm.variables.replaceIn("${expectedJsonValue}");
-                if (expFieldVal !== undefined && expFieldVal !== "") {
-                    pm.test("UI Assertion: JSON Field '" + "${expectedJsonField}" + "' equals " + expFieldVal, function () {
+            if (captureJsonField && captureVarName) {
+                scripts.push(`
+                    try {
                         var jsonData = pm.response.json();
-                        
-                        // Navigate path
-                        var path = "${expectedJsonField}".split('.');
+                        var path = "${captureJsonField}".split('.');
                         var current = jsonData;
                         for (var i = 0; i < path.length; i++) {
                             if (current === undefined) break;
                             current = current[path[i]];
                         }
-                        
-                        pm.expect(String(current)).to.eql(String(expFieldVal));
-                    });
-                }
-            `);
+                        if (current !== undefined) {
+                            pm.collectionVariables.set("${captureVarName}", String(current));
+                        }
+                    } catch(e) {}
+                `);
+            }
+
+            if (expectedJsonField && expectedJsonValue) {
+                scripts.push(`
+                    let expFieldVal = pm.variables.replaceIn("${expectedJsonValue}");
+                    if (expFieldVal !== undefined && expFieldVal !== "") {
+                        pm.test("UI Assertion: JSON Field '" + "${expectedJsonField}" + "' equals " + expFieldVal, function () {
+                            var jsonData = pm.response.json();
+                            
+                            // Navigate path
+                            var path = "${expectedJsonField}".split('.');
+                            var current = jsonData;
+                            for (var i = 0; i < path.length; i++) {
+                                if (current === undefined) break;
+                                current = current[path[i]];
+                            }
+                            
+                            pm.expect(String(current)).to.eql(String(expFieldVal));
+                        });
+                    }
+                `);
+            }
             
             if (!colData.event) colData.event = [];
             let testEvent = colData.event.find(e => e.listen === 'test');

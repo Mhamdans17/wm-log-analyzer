@@ -153,10 +153,27 @@
                         <p style="font-size: 0.75rem; font-weight: 500; color: var(--text-muted);">Optional. Sets standard env variables.</p>
                     </div>
 
-                    <div style="border-top: 2px dashed var(--border-color); margin: 0.5rem 0;"></div>
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 1.5rem 0;">
 
                     <div style="margin-bottom: 0.5rem;">
-                        <h3 style="font-size: 1rem; color: var(--text-main); margin-bottom: 4px;">Validasi Otomatis</h3>
+                        <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.2rem; color: var(--text-main);">Ekstraksi Variabel (Chaining)</h3>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">Menangkap *value* dari response dan menyimpannya sebagai variabel untuk request selanjutnya.</p>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 0.5rem;">
+                        <label for="captureJsonField" style="font-size: 0.85rem;">Capture JSON Field (Path)</label>
+                        <input type="text" id="captureJsonField" name="captureJsonField" placeholder="e.g. data.token">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="captureVarName" style="font-size: 0.85rem;">Simpan Sebagai Variabel</label>
+                        <input type="text" id="captureVarName" name="captureVarName" placeholder="e.g. token_rahasia (dipanggil dgn {{token_rahasia}})">
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 1.5rem 0;">
+
+                    <div style="margin-bottom: 0.5rem;">
+                        <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.2rem; color: var(--text-main);">Validasi Otomatis (JSON)</h3>
                         <!-- <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">Isi kolom di bawah untuk mengecek respon secara otomatis. Mendukung variabel dari file data CSV (cth: <code>{{status}}</code>).</p> -->
                     </div>
 
