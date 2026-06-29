@@ -12,6 +12,9 @@
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "multer": "^2.2.0",
+    "newman": "^6.2.2",
+    "newman-reporter-htmlextra": "^1.23.1",
     "socket.io": "^4.8.3",
     "tail": "^2.2.6"
   }

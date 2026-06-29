@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wM API Tester (Newman)</title>
+    <!-- Modern Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .tester-container {
+            display: flex;
+            gap: 2rem;
+            flex: 1;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .form-section {
+            flex: 0 0 400px;
+            background: #FFFFFF;
+            border-radius: 0;
+            padding: 1.5rem;
+            box-shadow:
+                4px 0 0 0 var(--text-main),
+                -4px 0 0 0 var(--text-main),
+                0 -4px 0 0 var(--text-main),
+                0 4px 0 0 var(--text-main),
+                8px 8px 0 0 rgba(20, 34, 23, 0.9);
+            border: none;
+            margin: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        .form-group input[type="file"],
+        .form-group input[type="text"] {
+            padding: 0.8rem;
+            border: 2px solid var(--text-main);
+            border-radius: 0;
+            font-family: inherit;
+            font-size: 0.9rem;
+            background: #FAFAFA;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: #FFFFFF;
+            box-shadow: 4px 4px 0 0 rgba(164, 226, 53, 0.8);
+        }
+
+        .form-group input[type="file"] {
+            cursor: pointer;
+        }
+
+        .tester-content-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: 0;
+        }
+
+        .brutalist-terminal {
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            background: #FFFFFF; 
+            border-radius: 0; 
+            border: none; 
+            overflow: hidden; 
+            box-shadow: 4px 0 0 0 var(--text-main), -4px 0 0 0 var(--text-main), 0 -4px 0 0 var(--text-main), 0 4px 0 0 var(--text-main), 8px 8px 0 0 rgba(20, 34, 23, 0.9); 
+            margin: 4px;
+        }
+
+        .run-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .loader {
+            display: none;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid var(--accent-dark);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-rings"></div>
+
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <h1>wM<span class="brand-accent">Tester</span></h1>
+            </div>
+
+            <div class="actions-right">
+                <a href="index.html" class="pill-btn outline" style="text-decoration: none;">&larr; Back to Streamer</a>
+            </div>
+        </header>
+
+        <div class="tester-container">
+            <div class="form-section">
+                <div style="margin-bottom: 1rem;">
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main);">API Tester</h2>
+                    <p style="font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 4px;">Run Postman Collections via Newman directly from your browser.</p>
+                </div>
+
+                <form id="testerForm">
+                    <div class="form-group">
+                        <label for="collectionFile">Postman Collection (.json) *</label>
+                        <input type="file" id="collectionFile" name="collection" accept=".json" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dataFile">Data File (.csv / .json)</label>
+                        <input type="file" id="dataFile" name="data" accept=".csv,.json">
+                        <p style="font-size: 0.75rem; font-weight: 500; color: var(--text-muted);">Optional. For data-driven testing.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="baseUrl">Base URL Override</label>
+                        <input type="text" id="baseUrl" name="baseUrl" placeholder="e.g. http://localhost:5555">
+                        <p style="font-size: 0.75rem; font-weight: 500; color: var(--text-muted);">Optional. Sets standard env variables.</p>
+                    </div>
+
+                    <div style="border-top: 2px dashed var(--border-color); margin: 0.5rem 0;"></div>
+
+                    <div style="margin-bottom: 0.5rem;">
+                        <h3 style="font-size: 1rem; color: var(--text-main); margin-bottom: 4px;">Validasi Otomatis</h3>
+                        <!-- <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">Isi kolom di bawah untuk mengecek respon secara otomatis. Mendukung variabel dari file data CSV (cth: <code>{{status}}</code>).</p> -->
+                    </div>
+
+                    <div class="form-group" style="margin-top: 0.5rem;">
+                        <label for="expectedJsonField" style="font-size: 0.85rem;">Expected JSON Field (Path)</label>
+                        <input type="text" id="expectedJsonField" name="expectedJsonField" placeholder="e.g. responseCode or data.status">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="expectedJsonValue" style="font-size: 0.85rem;">Expected JSON Value</label>
+                        <input type="text" id="expectedJsonValue" name="expectedJsonValue" placeholder="e.g. 2000000 or {{expected_val}}">
+                    </div>
+
+                    <button type="submit" class="pill-btn primary run-btn" id="runBtn" style="margin-top: 1.5rem;">
+                        <span id="btnText">Run Tests</span>
+                        <div class="loader" id="btnLoader"></div>
+                    </button>
+                </form>
+            </div>
+
+            <div class="tester-content-right">
+                <!-- Using original stat-cards classes for uniformity -->
+                <div class="stat-cards" id="reportSummary" style="display: none; margin-bottom: 1rem;">
+                    <div class="stat-card card-mid" style="text-align: center; padding: 1rem;">
+                        <h3 style="text-transform: uppercase; margin-bottom: 0;">Total Requests</h3>
+                        <div class="stat-number" id="totalReq" style="margin-top: 0.5rem; color: var(--text-main);">0</div>
+                    </div>
+                    <div class="stat-card card-light" style="text-align: center; padding: 1rem;">
+                        <h3 style="text-transform: uppercase; margin-bottom: 0;">Passed Assertions</h3>
+                        <div class="stat-number" id="passReq" style="margin-top: 0.5rem; color: var(--text-main);">0</div>
+                    </div>
+                    <div class="stat-card card-dark" style="text-align: center; padding: 1rem;">
+                        <h3 style="text-transform: uppercase; margin-bottom: 0;">Failed Assertions</h3>
+                        <div class="stat-number" id="failReq" style="margin-top: 0.5rem; color: var(--error);">0</div>
+                    </div>
+                </div>
+
+                <div id="reportActionContainer" style="display: none; justify-content: flex-end; margin-bottom: 1rem; gap: 0.5rem;">
+                    <button id="viewDataListBtn" class="pill-btn outline" style="color: var(--info); border-color: var(--info);">
+                        View Data List
+                    </button>
+                    <button id="clearReportBtn" class="pill-btn outline" style="color: var(--error); border-color: var(--error);">
+                        Clear Report
+                    </button>
+                    <a id="viewReportBtn" href="#" target="_blank" class="pill-btn primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        Open Full HTML Report
+                    </a>
+                </div>
+                
+                <div id="reportsListContainer" style="display: none; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; border: 2px solid var(--border-color); padding: 1rem; background: #FAFAFA;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
+                        <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);">Previous Reports</h3>
+                        <button id="closeReportsListBtn" style="background:none; border:none; cursor:pointer; font-weight:700;">✖</button>
+                    </div>
+                    <div id="reportsListItems" style="display: flex; flex-direction: column; gap: 0.4rem; max-height: 200px; overflow-y: auto;"></div>
+                </div>
+
+                <div class="brutalist-terminal">
+                    <div class="terminal-header" style="border-bottom: 2px solid var(--text-main);">
+                        <div class="terminal-title">
+                            Execution Logs <span>/ newman</span>
+                        </div>
+                    </div>
+                    <div class="terminal-body" id="logContainer">
+                        <div class="log-line" style="color: var(--text-muted); justify-content: center; align-items: center; height: 100%; display: flex;">
+                            Upload a collection and click Run to see results here.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="brutalistModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 1rem;">
+        <div style="background: #FAFAFA; border: 3px solid #000; box-shadow: 6px 6px 0 rgba(0,0,0,1); padding: 1.5rem; max-width: 400px; width: 100%; border-radius: 0;">
+            <h3 id="modalTitle" style="margin-top: 0; font-weight: 800; font-size: 1.2rem; border-bottom: 2px solid #000; padding-bottom: 0.5rem; margin-bottom: 1rem; color: var(--text-main);">Title</h3>
+            <p id="modalMessage" style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem; color: var(--text-main);">Message</p>
+            <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                <button id="modalCancelBtn" class="pill-btn outline" style="display: none;">Batal</button>
+                <button id="modalOkBtn" class="pill-btn primary">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="tester.js"></script>
+</body>
+</html>
